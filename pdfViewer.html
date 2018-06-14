@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html dir="ltr" mozdisallowselectionprint>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="google" content="notranslate">
+  <title>PDF.js viewer using built components</title>
+
+  <style>
+    body {
+      background-color: #808080;
+      margin: 0;
+      padding: 0;
+    }
+    #viewerContainer {
+      overflow: auto;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf_viewer.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf_viewer.js"></script>
+
+</head>
+
+<body tabindex="1">
+  <div id="viewerContainer">
+    <div id="viewer" class="pdfViewer"></div>
+  </div>
+
+  <script>
+
+'use strict';
+
+if (!pdfjsLib.getDocument || !pdfjsViewer.PDFViewer)  {
+  alert('Please build the pdfjs-dist library using\n' +
+        '  `gulp dist-install`');
+}
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.worker.js';
+
+var CMAP_URL = '../../node_modules/pdfjs-dist/cmaps/';
+var CMAP_PACKED = true;
+
+var DEFAULT_URL = 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+DEFAULT_URL = 'https://media.readthedocs.org/pdf/flask-cors/latest/flask-cors.pdf';
+var SEARCH_FOR = '';
+
+var container = document.getElementById('viewerContainer');
+
+var pdfLinkService = new pdfjsViewer.PDFLinkService();
+
+var pdfViewer = new pdfjsViewer.PDFViewer({
+  container: container,
+  linkService: pdfLinkService,
+});
+pdfLinkService.setViewer(pdfViewer);
+
+var pdfFindController = new pdfjsViewer.PDFFindController({
+  pdfViewer: pdfViewer,
+});
+pdfViewer.setFindController(pdfFindController);
+
+pdfjsLib.getDocument({
+  url: DEFAULT_URL,
+}).then(function(pdfDocument) {
+  pdfViewer.setDocument(pdfDocument);
+  pdfLinkService.setDocument(pdfDocument, null);
+});
+
+
+  </script>
+</body>
+</html>
+
