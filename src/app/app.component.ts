@@ -11,7 +11,7 @@ declare var pdfjsViewer: any;
 export class AppComponent implements OnInit {
   title = 'app';
 
-  url = 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+  url = 'https://media.readthedocs.org/pdf/flask-cors/latest/flask-cors.pdf';
 
   constructor() {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.worker.js';
